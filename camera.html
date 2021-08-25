@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oricam | Spécialiste des caméras vintage</title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.css"/>
+
+</head>
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="./index.html">ORICAM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link" aria-current="page" href="./index.html">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">A propos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Service clients</a></li>
+                </ul>
+                <form class="d-flex">
+                    <a class="btn btn-outline-dark btn-check-cart" role="button" href="./cart.html">
+                        <i class="bi-cart-fill me-1"></i>
+                        Panier
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- Section produit -->
+    <section class="py-0 py-md-5">
+        <div class="container px-4 px-lg-5 my-5" id="productContainer">
+            <div class="row gx-4 gx-lg-5 align-items-center" id="productPage">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" id="productImage" src="" alt="image caméra" /></div>
+                <div class="col-md-6">
+                    <h1 class="display-5 fw-bolder mb-4" id="productName"></h1>
+                    <div class="fs-5 mb-4">
+                        <span id="productPrice"></span><span class="euro"> €</span>
+                    </div>
+                    <div class="mb-4">
+                        <p class="mb-2">LENTILLE</p>
+                        <select class="form-select" id="select">
+                        </select>
+                    </div>
+                    <p class="lead mb-4" id="productDescription"></p>
+                    <div class="d-flex">
+                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                        <button id="addCart" class="btn btn-outline-dark flex-shrink-0" type="submit">
+                            <i class="bi-cart-fill me-1"></i>
+                            Ajouter au panier
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- Footer-->
+    <footer class="py-4 bg-dark mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p class="m-0 text-center text-white">Copyright &copy; ORICAM 2021</p>
+                </div>
+            </div>
+            <div class="row pt-3">
+                <div class="col">
+                  <ul class="list-inline text-center text-light m-0">
+                    <li class="list-inline-item"><a href="#" class="text-decoration-none link-light">Conditions générales</a></li>
+                    <li class="list-inline-item">&middot;</li>
+                    <li class="list-inline-item"><a href="#" class="text-decoration-none link-light">Politique vie privée</a></li>
+                    <li class="list-inline-item">&middot;</li>
+                    <li class="list-inline-item"><a href="#" class="text-decoration-none link-light">Gestion des cookies</a></li>
+                  </ul>
+                </div>
+              </div>
+        </div>
+    </footer>
+    
+    <!-- Boostrap scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
+    <!-- js -->
+    <script src="./js/article.js"></script>
+    <script src="./js/camera.js"></script>
+
+</body>
+</html>
+
