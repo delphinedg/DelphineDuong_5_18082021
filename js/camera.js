@@ -1,11 +1,9 @@
-// ----- CONTENU DE LA PAGE ----- //
-
-// 1) Créer une variable id pour chercher le paramètre "id" dans l'URL de la page
+// On crée une variable avec le paramètre "id" dans l'URL de la page
 
 let parameters = new URL(document.location).searchParams;
 let id = parameters.get("id");
 
-// --- Créer des constantes pour les éléments du DOM afin de faciliter l'écriture du fetch
+// Constantes pour les éléments du DOM
 
 const productName = document.getElementById("productName");
 const productPrice = document.getElementById("productPrice");
@@ -13,37 +11,13 @@ const productImage = document.getElementById("productImage");
 const productDescription = document.getElementById("productDescription");
 const productOption = document.getElementById("select");
 
-// 2) Vérifier si nous avons bien un paramètre id dans l'URL avant de chercher les données du produit. Si non, afficher un texte d'erreur.
+const addCartBtn = document.getElementById("addCart");
 
-function displayContent() {
-  if (id !== null && id !== "") {
-    displayArticle();
-  } else {
-    displayError();
-  }
-}
+// -------------------- CONTENU DE LA PAGE --------------------
 
-displayContent();
+// Si on a un paramètre id dans l'URL, on récupère les données produit dans l'API et on les affiche dans le HTML. Si non, on affiche un texte d'erreur.
 
-// --- Fonction pour afficher le texte d'erreur
-
-function displayError() {
-  document.getElementById("productContainer").innerHTML = `            
-      <div class="row my-5 py-5" id="errorPage">
-          <div class="col-12 text-center py-5 my-4">
-              <h1 class="display-1 fw-bolder">404</h1>
-              <p class="display-6 fw-bolder text-secondary">Produit introuvable</p>
-              <p class="lead mb-4">Le produit que vous recherchez n'existe pas ou n'est plus disponible.</p>
-              <a class="btn btn-outline-dark" role="button" href="./index.html">
-                  Retour à la page d'accueil
-              </a>
-          </div>
-      </div>`;
-}
-
-// --- Fonction pour récupérer et afficher les données du produit
-
-function displayArticle() {
+if (id !== null && id !== "") {
   fetch(`http://localhost:3000/api/cameras/${id}`)
     .then(function (response) {
       return response.json();
@@ -64,49 +38,56 @@ function displayArticle() {
     .catch(function (err) {
       displayError();
     });
+} else {
+  displayError();
 }
 
-// ----- GESTION DU PANIER ----- //
+// --- Fonction pour afficher le texte d'erreur
 
-function addToCart() {
-  // 1) Récupérer les données du produit sélectionnées par l'utilisateur lorsqu'il clique sur le bouton "ajouter au panier"
-
-  const addCartBtn = document.getElementById("addCart");
-
-  addCartBtn.addEventListener("click", function (event) {
-    event.preventDefault();
-
-    let productAdded = {
-      name: productName.innerHTML,
-      price: productPrice.innerHTML,
-      quantity: document.getElementById("inputQuantity").value,
-      _id: id,
-    };
-
-    // 2) Stocker les valeurs dans le local storage.
-
-    // --- Déclaration de la variable "productInLocalStorage" dans laquelle on met les "key" et "value" qui sont dans le local storage. JSON.parse pour convertir les données au format JSON qui sont dans le local storage, en objet Javascript.
-
-    let productInLocalStorage = JSON.parse(localStorage.getItem("product"));
-
-    // --- Fonction pour ajouter un produit sélectionné dans le local storage
-    function addProductInLocalStorage() {
-      // Ajout des "values" du produit choisi
-      productInLocalStorage.push(productAdded);
-      // Transformation des "values" en format JSON et envoie de la "key" vers le local Storage
-      localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-    }
-
-    // ** Cas 1 : S'il y a déjà des produits enregistrés (true), on ajoute l'objet dans le tableau existant.
-    if (productInLocalStorage) {
-      addProductInLocalStorage();
-    }
-    // ** Cas 2 : S'il n'y a pas de produits enregistrés (false), on crée un tableau et on ajoute l'objet.
-    else {
-      productInLocalStorage = [];
-      addProductInLocalStorage();
-    }
-  });
+function displayError() {
+  document.getElementById("productContainer").innerHTML = `            
+      <div class="row my-5 py-5" id="errorPage">
+          <div class="col-12 text-center py-5 my-4">
+              <h1 class="display-1 fw-bolder">404</h1>
+              <p class="display-6 fw-bolder text-secondary">Produit introuvable</p>
+              <p class="lead mb-4">Le produit que vous recherchez n'existe pas ou n'est plus disponible.</p>
+              <a class="btn btn-outline-dark" role="button" href="./index.html">
+                  Retour à la page d'accueil
+              </a>
+          </div>
+      </div>`;
 }
 
-addToCart();
+// -------------------- AJOUT AU PANIER --------------------
+
+// Au clic du bouton "Ajouter au panier", on récupère les données du produit sélectionnées par l'utilisateur et on stocke les valeurs dans le local storage
+
+addCartBtn.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  // --- Objet
+  let productAdded = {
+    name: productName.innerHTML,
+    price: productPrice.innerHTML,
+    _id: id,
+  };
+
+  // --- Variable dans laquelle on met les "key" et "value" qui sont dans le local storage. JSON.parse pour convertir les données au format JSON qui sont dans le local storage, en objet Javascript.
+  let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
+
+  // --- Fonction pour ajouter un produit sélectionné dans le local storage
+  function addProductInLocalStorage() {
+    productInLocalStorage.push(productAdded);
+    localStorage.setItem("products", JSON.stringify(productInLocalStorage));
+  }
+
+  // ** Cas 1 : S'il y a déjà des produits enregistrés (true), on ajoute l'objet dans le tableau existant.
+  if (productInLocalStorage) {
+    addProductInLocalStorage();
+  }
+  // ** Cas 2 : S'il n'y a pas de produits enregistrés (false), on crée un tableau et on ajoute l'objet.
+  else {
+    productInLocalStorage = [];
+    addProductInLocalStorage();
+  }
+});
