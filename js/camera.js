@@ -12,6 +12,13 @@ const productDescription = document.getElementById("productDescription");
 const productOption = document.getElementById("select");
 
 const addCartBtn = document.getElementById("addCart");
+const itemAdded = document.getElementById("itemAlreadyAdded");
+const productContainer = document.getElementById("productContainer");
+
+// Variables pour le local storage
+
+let productsArray = [];
+let productsInLocalStorage = JSON.parse(localStorage.getItem("products"));
 
 // -------------------- CONTENU DE LA PAGE --------------------
 
@@ -36,17 +43,17 @@ if (id !== null && id !== "") {
       }
     })
     .catch(function (err) {
-      displayError();
+      displayError(productContainer);
     });
 } else {
-  displayError();
+  displayError(productContainer);
 }
 
 // --- Fonction pour afficher le texte d'erreur
 
-function displayError() {
-  document.getElementById("productContainer").innerHTML = `            
-      <div class="row my-5 py-5" id="errorPage">
+function displayError(container) {
+  container.innerHTML = `            
+      <div class="row my-5 py-5">
           <div class="col-12 text-center py-5 my-4">
               <h1 class="display-1 fw-bolder">404</h1>
               <p class="display-6 fw-bolder text-secondary">Produit introuvable</p>
@@ -60,34 +67,44 @@ function displayError() {
 
 // -------------------- AJOUT AU PANIER --------------------
 
-// Au clic du bouton "Ajouter au panier", on récupère les données du produit sélectionnées par l'utilisateur et on stocke les valeurs dans le local storage
+// Au clic du bouton "Ajouter au panier"
 
-addCartBtn.addEventListener("click", function (event) {
-  event.preventDefault();
+addCartBtn.addEventListener("click", function (e) {
+  e.preventDefault();
 
-  // --- Objet
-  let productAdded = {
+  let item = {
     name: productName.innerHTML,
     price: productPrice.innerHTML,
     _id: id,
   };
 
-  // --- Variable dans laquelle on met les "key" et "value" qui sont dans le local storage. JSON.parse pour convertir les données au format JSON qui sont dans le local storage, en objet Javascript.
-  let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
-
-  // --- Fonction pour ajouter un produit sélectionné dans le local storage
-  function addProductInLocalStorage() {
-    productInLocalStorage.push(productAdded);
-    localStorage.setItem("products", JSON.stringify(productInLocalStorage));
-  }
-
-  // ** Cas 1 : S'il y a déjà des produits enregistrés (true), on ajoute l'objet dans le tableau existant.
-  if (productInLocalStorage) {
-    addProductInLocalStorage();
-  }
-  // ** Cas 2 : S'il n'y a pas de produits enregistrés (false), on crée un tableau et on ajoute l'objet.
+  // S'il n'y a pas de produits dans la key "products" du local storage, on ajoute les données du produit sélectionné dans l'objet "item", on met cet objet dans le tableau (vide) "productsArray" et on stocke le tableau dans le local storage.
+  if (productsInLocalStorage == null) {
+    productsArray.push(item);
+    localStorage.setItem("products", JSON.stringify(productsArray));
+  } 
+  // S'il y a déjà des produits dans la key "products", on récupère le tableau existant avec les objets et on y ajoute un nouvel objet avec les données du produit sélectionné.
   else {
-    productInLocalStorage = [];
-    addProductInLocalStorage();
+    productsArray = productsInLocalStorage;
+    productsArray.push(item);
+    localStorage.setItem("products", JSON.stringify(productsArray));
   }
+  
+  // On désactive le bouton ajout au panier et on affiche un message de succès.
+  addCartBtn.setAttribute("disabled", true);
+  itemAdded.innerHTML = `Ce produit a été ajouté dans votre <a class="text-success"
+  href="./cart.html">panier</a> !`
+
 });
+
+
+// Si le produit est déjà dans le panier, on désactive le bouton "ajouter au panier"
+
+for (j = 0; j < productsInLocalStorage.length; j++) {
+  let products = productsInLocalStorage[j];
+  if (products._id === id) {
+    addCartBtn.setAttribute("disabled", true);
+    itemAdded.innerHTML = `Ce produit est déjà dans votre <a class="text-success"
+    href="./cart.html">panier</a>.`
+  }
+}
