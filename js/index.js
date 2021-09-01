@@ -1,3 +1,4 @@
+// -------------------- CONTENU DE LA PAGE --------------------
 // Récupérer la liste des produits de l'API au format JSON
 // Afficher la liste des produits sur la page index.html (dans l'élément #productsList) en utilisant une boucle
 // Mettre un message d'erreur s'il y a une erreur
@@ -29,7 +30,7 @@ fetch("http://localhost:3000/api/cameras")
                     </div>
                 </div>
                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center"><a class="btn btn-outline-dark mt-auto stretched-link" href="camera.html?id=${
+                    <div class="text-center"><a class="btn btn-outline-dark mt-auto stretched-link" href="produit.html?id=${
                       article._id
                     }">Voir les détails</a></div>
                 </div>

@@ -78,7 +78,7 @@ addCartBtn.addEventListener("click", function (e) {
     _id: id,
   };
 
-  // S'il n'y a pas de produits dans la key "products" du local storage, on ajoute les données du produit sélectionné dans l'objet "item", on met cet objet dans le tableau (vide) "productsArray" et on stocke le tableau dans le local storage.
+  // S'il n'y a pas de produits dans la key "products" du local storage, on ajoute les données du produit dans l'objet "item", on met cet objet dans le tableau (vide) "productsArray" et on stocke le tableau dans le local storage.
   if (productsInLocalStorage == null) {
     productsArray.push(item);
     localStorage.setItem("products", JSON.stringify(productsArray));
@@ -92,19 +92,19 @@ addCartBtn.addEventListener("click", function (e) {
   
   // On désactive le bouton ajout au panier et on affiche un message de succès.
   addCartBtn.setAttribute("disabled", true);
-  itemAdded.innerHTML = `Ce produit a été ajouté dans votre <a class="text-success"
-  href="./cart.html">panier</a> !`
-
+  itemAdded.innerHTML = `Ce produit a bien été ajouté dans votre <a class="text-success"
+  href="./panier.html">panier</a> !`;
 });
-
 
 // Si le produit est déjà dans le panier, on désactive le bouton "ajouter au panier"
 
-for (j = 0; j < productsInLocalStorage.length; j++) {
-  let products = productsInLocalStorage[j];
-  if (products._id === id) {
-    addCartBtn.setAttribute("disabled", true);
-    itemAdded.innerHTML = `Ce produit est déjà dans votre <a class="text-success"
-    href="./cart.html">panier</a>.`
+if (productsInLocalStorage) {
+  for (j = 0; j < productsInLocalStorage.length; j++) {
+    let products = productsInLocalStorage[j];
+    if (products._id === id) {
+      addCartBtn.setAttribute("disabled", true);
+      itemAdded.innerHTML = `Ce produit est déjà dans votre <a class="text-success"
+      href="./panier.html">panier</a>.`;
+    }
   }
 }

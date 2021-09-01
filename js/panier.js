@@ -1,28 +1,26 @@
 // On récupère la liste des produits du Local Storage
 let products = JSON.parse(localStorage.getItem("products"));
-//console.log("produits", products);
 
-// Variables
 const productCartSummary = document.getElementById("productCartSummary");
 const allProducts = document.getElementById("allProductsTable");
 const form = document.getElementById("form");
 
 // -------------------- PANIER --------------------
 
-// SI le local storage contient au moins un objet (produit), on affiche les produits dans le panier,
-// SI NON on affiche le message panier vide.
+// Si le local storage contient au moins un objet (produit), on affiche les produits dans le panier,
+// Si non on affiche le message panier vide.
 
 if (products) {
   // Boucle for pour récupérer tous les objets du local storage et les ajouter dans le HTML.
   for (let product in products) {
     product = products[product];
     allProducts.innerHTML += `
-    <tbody>
+    <tbody id="${product._id}">
     <tr>
         <th scope="row">
             <div class="p-2">
                 <div class="ml-3 d-inline-block">
-                    <p class="mb-1 fs-5"> <a href="../front-end/camera.html?id=${product._id}" class="text-dark d-inline-block text-decoration-none">${product.name}</a></p><span class="text-uppercase fw-light">Lentille : </span>
+                    <p class="mb-1 fs-5"> <a href="../front-end/produit.html?id=${product._id}" class="text-dark d-inline-block text-decoration-none">${product.name}</a></p><span class="text-uppercase fw-light">Lentille : </span>
                 </div>
             </div>
         </th>
@@ -32,8 +30,14 @@ if (products) {
     <tr>
     </tbody>`;
   }
+  displayTotal (products);
 } else {
-  productCartSummary.innerHTML = `
+  displayCartEmpty (productCartSummary);
+}
+
+// --- Fonction pour afficher un message "votre panier est vide".
+function displayCartEmpty (container) {
+  container.innerHTML = `
   <div class="p-4 bg-white rounded shadow-sm">
       <p>Votre panier est vide.</p>
       <a class="btn btn-dark btn-check-cart" role="button" href="./index.html">
@@ -43,41 +47,44 @@ if (products) {
   document.getElementById("formValidation").style.display = "none";
 }
 
-
-// Calculer la somme du panier
-
-function totalCart() {
+// --- Fonctions pour calculer la somme du panier et afficher le total sur la page.
+function totalCart(products) {
   let totalPrice = 0;
-  for (product of products) {
-    totalPrice += parseInt(product.price);
+  if (products) {
+    for (product of products) {
+      totalPrice += parseInt(product.price);
+    }
+    return totalPrice;
+  } else {
+    return totalPrice
   }
-  return totalPrice;
 }
 
-document.getElementById("totalCart").innerHTML = `${totalCart()} €`;
-document.getElementById("totalOrder").innerHTML = `${totalCart()} €`;
+function displayTotal (products) {
+  document.getElementById("totalCart").innerHTML = `${totalCart(products)} €`;
+  document.getElementById("totalOrder").innerHTML = `${totalCart(products)} €`;
+}
 
-// Supprimer les produits
-
+// --- Fonction pour supprimer les produits du panier.
 function removeItem(id) {
-  //console.log(products);
   for (let i = 0; i < products.length; i++) {
     if (products[i]._id === id) {
       products.splice(i, 1);
       localStorage.setItem("products", JSON.stringify(products));
+      document.getElementById(id).remove();
+      break;
     }
   }
   if (products.length === 0) {
     localStorage.clear();
+    displayCartEmpty (productCartSummary);
   }
-  window.location.reload();
+  displayTotal (products);
 }
-
 
 // -------------------- FORMULAIRE --------------------
 
-// Fonction pour vérifier les données saisies par l'utilisateur
-
+// --- Fonction pour vérifier les données saisies par l'utilisateur
 function validateForm(contact) {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   let error = document.getElementById("errorForm");
@@ -128,8 +135,6 @@ form.addEventListener("submit", function (e) {
     products: productId,
   };
 
-  //console.log('orderJSON', JSON.stringify(order))
-
   if (validateForm(contact)) {
     fetch("http://localhost:3000/api/cameras/order", {
       method: "POST",
@@ -148,18 +153,11 @@ form.addEventListener("submit", function (e) {
     .then(function (data) {
       //console.log(data);
       localStorage.setItem("orderId", data.orderId);
-      localStorage.setItem("totalCart", totalCart());
+      localStorage.setItem("totalCart", totalCart(products));
       document.location.href = "confirmation.html";
     })
     .catch(function(err) {
       console.log(err);
     })
-
   }
-
-  // Si le formulaire n'est pas bon (false), on affiche un message d'erreur (contenu dans la fonction validateForm)
-  //else {
-    //console.log("formulaire invalide");
-//   }
 });
-
