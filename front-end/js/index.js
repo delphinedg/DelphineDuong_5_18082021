@@ -41,7 +41,7 @@ fetch("http://localhost:3000/api/cameras")
   .catch(function (error) {
     document.getElementById("productsList").innerHTML += `
         <div class="col-12 text-center">
-            <p class="h2">Aïe...</p>
-            <p>Une erreur est survenue lors du chargement de la liste des produits.</p>
+            <p class="h2">Oups !</p>
+            <p>Une erreur s'est produite lors du chargement de la liste des produits. Veuillez vous connecter au serveur.</p>
         </div>`;
   });
