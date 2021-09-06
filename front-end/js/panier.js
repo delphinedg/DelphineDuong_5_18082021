@@ -87,6 +87,7 @@ function removeItem(id) {
 // --- Fonction pour vérifier les données saisies par l'utilisateur
 function validateForm(contact) {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const nameRegex = /^[a-zA-Zéèçàêëöùä]+(([',. -][a-zA-Zéèçàêëöùä ])?[a-zA-Zéèçàêëöùä]*)*$/;
   let error = document.getElementById("errorForm");
   if (
     contact.firstName == "" ||
@@ -97,6 +98,18 @@ function validateForm(contact) {
   ) {
     error.innerHTML =
       "Veuillez renseigner tous les champs du formulaire avant de valider votre commande.";
+    error.style.color = "red";
+    return false;
+  } else if (nameRegex.test(contact.lastName) == false) {
+    error.innerHTML = "Veuillez entrer un nom valide.";
+    error.style.color = "red";
+    return false;
+  } else if (nameRegex.test(contact.firstName) == false) {
+    error.innerHTML = "Veuillez entrer un prénom valide.";
+    error.style.color = "red";
+    return false;
+  } else if (nameRegex.test(contact.city) == false) {
+    error.innerHTML = "Veuillez entrer une ville valide.";
     error.style.color = "red";
     return false;
   } else if (emailRegex.test(contact.email) == false) {
